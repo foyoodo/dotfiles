@@ -1,6 +1,9 @@
 require "focus"
 require "remag"
 
+hs.loadSpoon("SpoonInstall")
+spoon.SpoonInstall:asyncUpdateAllRepos()
+
 if not hspoonList then
     hspoonList = {
         "ReloadConfiguration",
@@ -8,7 +11,7 @@ if not hspoonList then
 end
 
 for _, v in pairs(hspoonList) do
-    hs.loadSpoon(v)
+    spoon.SpoonInstall:andUse(v, {
+        start = (v == "ReloadConfiguration"),
+    })
 end
-
-spoon.ReloadConfiguration:start()
