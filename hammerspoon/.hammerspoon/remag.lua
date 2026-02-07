@@ -1,72 +1,85 @@
 local gap = 5
+local screen = hs.screen
+local window = hs.window
 
-function central(win, frame)
-    local f = frame
-    f.x = (win.x + (win.w - f.w) / 2) // 1
-    f.y = (win.y + (win.h - f.h) / 2) // 1
-    return f
+local function centerIn(winFrame, frame)
+    frame.x = (winFrame.x + (winFrame.w - frame.w) / 2) // 1
+    frame.y = (winFrame.y + (winFrame.h - frame.h) / 2) // 1
+    return frame
 end
 
-function centerAnimated()
-    local mid = hs.screen.mainScreen():frame()
-    local win = hs.window.focusedWindow()
+local function withWindow(apply)
+    local mid = screen.mainScreen():frame()
+    local win = window.focusedWindow()
     local f = win:frame()
-    win:setFrame(central(mid, f))
+    apply(mid, win, f)
 end
 
-function centerAfter(transform)
+local function setCenteredFrame(mid, win, f, instant)
+    if instant then
+        win:setFrame(centerIn(mid, f), 0)
+    else
+        win:setFrame(centerIn(mid, f))
+    end
+end
+
+local function recenter(instant)
+    withWindow(function(mid, win, f)
+        setCenteredFrame(mid, win, f, instant)
+    end)
+end
+
+local function centerAspect(d, w, h)
+    return function()
+        withWindow(function(mid, win, f)
+            local p = (mid.h * d + h - 1) // h
+            f.w = p * w
+            f.h = p * h
+            setCenteredFrame(mid, win, f, true)
+        end)
+    end
+end
+
+local function center(r)
+    return function()
+        withWindow(function(mid, win, f)
+            f.w = ((mid.w - gap * 2) * r) // 1
+            f.h = mid.h - gap * 2
+            setCenteredFrame(mid, win, f, true)
+        end)
+    end
+end
+
+local function centerScale(dw, dh)
+    return function()
+        withWindow(function(mid, win, f)
+            f.w = (mid.w * dw) // 1
+            f.h = (mid.h * dh) // 1
+            setCenteredFrame(mid, win, f, true)
+        end)
+    end
+end
+
+local function max()
+    withWindow(function(mid, win)
+        win:setFrame(mid, 0)
+    end)
+end
+
+local function toggleFullScreen()
+    local win = window.focusedWindow()
+    win:setFullScreen(not win:isFullScreen())
+end
+
+local function centerAnimated()
+    recenter(false)
+end
+
+local function centerAfter(transform)
     return function()
         transform()
-        local mid = hs.screen.mainScreen():frame()
-        local win = hs.window.focusedWindow()
-        local f = win:frame()
-        win:setFrame(central(mid, f), 0)
+        recenter(true)
     end
-end
-
-function centerAspect(d, w, h)
-    return function()
-        local mid = hs.screen.mainScreen():frame()
-        local win = hs.window.focusedWindow()
-        local f = win:frame()
-        local p = (mid.h * d + h - 1) // h
-        f.w = p * w
-        f.h = p * h
-        win:setFrame(central(mid, f), 0)
-    end
-end
-
-function center(r)
-    return function()
-        local mid = hs.screen.mainScreen():frame()
-        local win = hs.window.focusedWindow()
-        local f = win:frame()
-        f.w = ((mid.w - gap * 2) * r) // 1
-        f.h = mid.h - gap * 2
-        win:setFrame(central(mid, f), 0)
-    end
-end
-
-function centerScale(dw, dh)
-    return function()
-        local mid = hs.screen.mainScreen():frame()
-        local win = hs.window.focusedWindow()
-        local f = win:frame()
-        f.w = (mid.w * dw) // 1
-        f.h = (mid.h * dh) // 1
-        win:setFrame(central(mid, f), 0)
-    end
-end
-
-function max()
-    local mid = hs.screen.mainScreen():frame()
-    local win = hs.window.focusedWindow()
-    win:setFrame(mid, 0)
-end
-
-function toggleFullScreen()
-    local win = hs.window.focusedWindow()
-    win:setFullScreen(not win:isFullScreen())
 end
 
 hs.hotkey.bind({"ctrl", "alt"}, "C", centerAnimated)
