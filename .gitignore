@@ -3,3 +3,7 @@ Spoons/
 
 ### Syncthing ###
 .stfolder/
+
+### Karabiner ###
+automatic_backups/
+karabiner.json
