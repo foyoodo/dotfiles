@@ -29,10 +29,15 @@ local function recenter(instant)
     end)
 end
 
-local function centerAspect(d, w, h)
+local function centerAspect(v, d, w, h)
     return function()
         withWindow(function(mid, win, f)
-            local p = (mid.h * d + h - 1) // h
+            local p
+            if v then
+                p = (mid.h * d + h - 1) // h
+            else
+                p = (mid.w * d + w - 1) // w
+            end
             f.w = p * w
             f.h = p * h
             setCenteredFrame(mid, win, f, true)
@@ -83,9 +88,9 @@ local function centerAfter(transform)
 end
 
 hs.hotkey.bind({"ctrl", "alt"}, "C", centerAnimated)
-hs.hotkey.bind({"ctrl", "alt"}, "V", centerAfter(centerAspect(0.9, 16, 9)))
+hs.hotkey.bind({"ctrl", "alt"}, "V", centerAfter(centerAspect(false, 0.9, 16, 9)))
 hs.hotkey.bind({"ctrl", "alt"}, "T", center(0.8))
-hs.hotkey.bind({"ctrl", "alt"}, "F", centerAspect(0.9, 3, 2))
+hs.hotkey.bind({"ctrl", "alt"}, "F", centerAspect(true, 0.9, 3, 2))
 hs.hotkey.bind({"ctrl", "alt"}, "B", centerScale(0.6, 0.8))
 
 hs.hotkey.bind({"ctrl", "alt"}, "return", max)
