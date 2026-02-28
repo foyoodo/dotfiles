@@ -1,0 +1,79 @@
+// Zed settings
+//
+// For information on how to configure Zed, see the Zed
+// documentation: https://zed.dev/docs/configuring-zed
+//
+// To see all of Zed's default settings without changing your
+// custom settings, run `zed: open default settings` from the
+// command palette (cmd-shift-p / ctrl-shift-p)
+{
+  "edit_predictions": {
+    "provider": "zed"
+  },
+  "minimap": {
+    "show": "always"
+  },
+  "icon_theme": "Colored Zed Icons Theme Dark",
+  "buffer_font_weight": 400.0,
+  "terminal": {
+    "font_weight": 400.0
+  },
+  "sticky_scroll": {},
+  "allow_rewrap": "in_comments",
+  "show_wrap_guides": true,
+  "soft_wrap": "editor_width",
+  "wrap_guides": [80],
+  "indent_guides": {
+    "background_coloring": "disabled",
+    "coloring": "indent_aware",
+    "active_line_width": 1,
+    "line_width": 1,
+    "enabled": true
+  },
+  "base_keymap": "SublimeText",
+  "telemetry": {
+    "diagnostics": false,
+    "metrics": false
+  },
+
+  "ui_font_size": 15,
+
+  "buffer_font_size": 14,
+  "buffer_font_family": "IBM Plex Mono",
+  "buffer_line_height": { "custom": 1.5 },
+
+  "cursor_blink": false,
+  "cursor_shape": "bar",
+  "show_whitespaces": "boundary",
+  "remove_trailing_whitespace_on_save": true,
+  "scroll_sensitivity": 0.8,
+
+  "theme": {
+    "mode": "dark",
+    "light": "Zedokai (Filter Machine)",
+    "dark": "Sublime Mariana"
+  },
+
+  "languages": {
+    "Swift": {
+      "completions": {
+        
+      },
+      "soft_wrap": "editor_width",
+      "enable_language_server": true,
+      "language_servers": ["sourcekit-lsp"],
+      "formatter": "language_server",
+      "format_on_save": "off"
+    }
+  },
+
+  "lsp": {
+    "rust-analyzer": {
+      "initialization_options": {
+        "rust": {
+          "analyzerTargetDir": true
+        }
+      }
+    }
+  }
+}
